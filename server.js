@@ -12,15 +12,18 @@ app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 
-var dbUrl = 'mongodb://user:user@ds155424.mlab.com:55424/learning-node'
+console.log(process.env.dbUrl)
+
+var dbUrl = process.env.dbUrl || 'mongodb://user:user@ds155424.mlab.com:55424/learning-node' //Test mongodb database
 
 var Message = mongoose.model('Message',{
     name: String,
-    message: String
+    message: String,
+    messageTime: { type: Date, default: Date.now }
 })
 
 app.get('/messages', (req,res) => {
-    Message.find({}, (err, messages) =>{
+    Message.find({ $query: {}, $orderby: { messageTime : -1 } }, (err, messages) =>{
         res.send(messages)
     })
 })
@@ -55,6 +58,7 @@ mongoose.connect(dbUrl, { useMongoClient: true}, err =>{
     console.log('mongo db connection', err)
 })
 
-var server = http.listen(80, ()=> {
+var PORT = process.env.PORT || 3000
+var server = http.listen(PORT, ()=> {
     console.log('server is listening on port', server.address().port)
 })
