@@ -28,11 +28,17 @@
         getMessages()
     })
 
-    socket.on('message', addMessage)
+    socket.on('message', receiveMessage)
 
     function addMessage(message)
     {
         $("#messages").append(`<h4> ${message.name} </hr>
+            <p> ${message.message} </p>`)
+    }
+
+    function receiveMessage(message)
+    {
+        $("#messages").prepend(`<h4> ${message.name} </hr>
             <p> ${message.message} </p>`)
     }
 
