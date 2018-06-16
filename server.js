@@ -23,7 +23,7 @@ var Message = mongoose.model('Message',{
 })
 
 app.get('/messages', (req,res) => {
-    Message.find({ $query: {}, $orderby: { messageTime : -1 } }, (err, messages) =>{
+    Message.find({}, null, {sort: { messageTime : -1 }}, (err, messages) =>{
         res.send(messages)
     })
 })
